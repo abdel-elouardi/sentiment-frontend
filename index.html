@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Sentiment</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 600px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 { text-align: center; color: #333; margin-bottom: 10px; font-size: 26px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; font-size: 14px; }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            height: 150px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        textarea:focus { border-color: #f5576c; }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: opacity 0.3s;
+        }
+        button:hover { opacity: 0.9; }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        .result.positif { background: #e0ffe0; border: 2px solid #55efc4; color: #00b894; }
+        .result.negatif { background: #ffe0e0; border: 2px solid #ff6b6b; color: #d63031; }
+        .result h2 { font-size: 24px; margin-bottom: 10px; }
+
+        .progress-container {
+            margin-top: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+            width: 0%;
+        }
+        .progress-bar.positif { background: linear-gradient(90deg, #55efc4, #00b894); }
+        .progress-bar.negatif { background: linear-gradient(90deg, #ff6b6b, #d63031); }
+        .progress-label { margin-top: 8px; font-size: 13px; font-weight: 600; }
+
+        .examples {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #888;
+        }
+        .examples p { margin-bottom: 8px; font-weight: 600; }
+        .example-btn {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 3px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            width: auto;
+            color: #333;
+        }
+        .example-btn:hover { background: #e0e0e0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💬 Analyse de Sentiment</h1>
+        <p class="subtitle">Analysez le sentiment de n'importe quel avis en anglais</p>
+
+        <textarea id="text" placeholder="Entrez votre avis ici..."></textarea>
+
+        <button onclick="predict()">🔍 Analyser</button>
+
+        <div class="result" id="result">
+            <h2 id="result-label"></h2>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <p class="progress-label" id="result-prob"></p>
+        </div>
+
+        <div class="examples">
+            <p>Exemples :</p>
+            <span class="example-btn" onclick="setExample('This product is amazing! I love it so much.')">✅ Positif 1</span>
+            <span class="example-btn" onclick="setExample('Best purchase I have ever made, highly reco
